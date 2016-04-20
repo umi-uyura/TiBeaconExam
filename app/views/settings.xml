@@ -1,0 +1,28 @@
+
+<Alloy>
+  <Model src="setting"/>
+  <NavigationWindow platform="ios">
+    <Window title="Settings" platform="ios" onOpen="doOpen" onClose="doClose" onAndroidback="doClickClose" class="container">
+      <LeftNavButton platform="ios">
+        <Button id="btnClose" title="Close" onClick="doClickClose"/>
+      </LeftNavButton>
+      <View class="base">
+        <Require id="settingBeaconIdentifier" src="settingitem" subject="Identifier" text="hogehoge"></Require>
+        <Require id="settingBeaconUUID" src="settingitem" subject="UUID" text="fugafuga"></Require>
+        <Require id="settingBeaconMajor" src="settingitem" subject="Major"></Require>
+        <Require id="settingBeaconMinor" src="settingitem" subject="Minor"></Require>
+      </View>
+    </Window>
+  </NavigationWindow>
+  <Window title="Settings" platform="android" onOpen="doOpen" onClose="doClose" onAndroidback="doClickClose" class="container">
+    <LeftNavButton platform="ios">
+      <Button id="btnClose" title="Close" onClick="doClickClose"/>
+    </LeftNavButton>
+    <View class="base">
+      <Require id="settingBeaconIdentifier" src="settingitem" subject="Identifier" text="hogehoge"></Require>
+      <Require id="settingBeaconUUID" src="settingitem" subject="UUID" text="fugafuga"></Require>
+      <Require id="settingBeaconMajor" src="settingitem" subject="Major"></Require>
+      <Require id="settingBeaconMinor" src="settingitem" subject="Minor"></Require>
+    </View>
+  </Window>
+</Alloy>

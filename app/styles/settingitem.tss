@@ -1,0 +1,16 @@
+".base": {
+  width: Ti.UI.FILL,
+  height: Ti.UI.SIZE,
+  layout: "vertical"
+},
+".label": {
+  width: Ti.UI.FILL,
+  textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+  color: "gray",
+  backgroundColor: "#eee"
+},
+".textfield": {
+  width: Ti.UI.FILL,
+  textAlign: Ti.UI.TEXT_ALIGNMENT_RIGHT,
+  color: "black"
+}

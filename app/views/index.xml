@@ -1,0 +1,186 @@
+
+<Alloy>
+  <Model src="setting"/>
+  <Collection src="beacons"/>
+  <Collection src="events"/>
+  <TabGroup platform="ios" onOpen="doOpen" onClose="doClose">
+    <Menu platform="android">
+      <MenuItem id="menuStart" title="Start Scan" onClick="doClickScan"/>
+      <MenuItem id="menuStop" title="Stop Scan" onClick="doClickStop"/>
+      <MenuItem id="menuClear" title="Clear" onClick="doClickClear"/>
+      <MenuItem id="menuSettings" title="Settings" onClick="doClickSettings"/>
+    </Menu>
+    <Tab id="tabBeacons" title="Beacon">
+      <Window title="TiBeaconExam" platform="ios" class="container">
+        <LeftNavButton platform="ios">
+          <Button id="btnSettings" title="Settings" onClick="doClickSettings"/>
+        </LeftNavButton>
+        <RightNavButton platform="ios">
+          <Button id="btnAction" systemButton="ACTION" title="Action" onClick="doClickAction"/>
+        </RightNavButton>
+        <TitleControl platform="ios">
+          <View>
+            <Label id="titleLabel">TiBeaconExam</Label>
+            <ActivityIndicator id="indicator" message="Scanning..." style="Ti.UI.ActivityIndicatorStyle.DARK"></ActivityIndicator>
+          </View>
+        </TitleControl>
+        <ProgressIndicator id="pb" ns="Ti.UI.Android" platform="android" message="Scanning..."/>
+        <ListView id="beaconList" onItemclick="clickBeaconListItem">
+          <Templates>
+            <ItemTemplate name="beaconLog" class="viewLogItemBase">
+              <View class="viewLogItem">
+                <View class="viewLogItemLine">
+                  <View class="viewLogItemProximity">
+                    <Label class="viewLogItemTitle">MAJ:</Label>
+                    <Label id="proximity" bindId="major" class="viewLogItemLabel"/>
+                    <Label class="viewLogItemSpace"></Label>
+                    <Label class="viewLogItemTitle">MIN:</Label>
+                    <Label id="power" bindId="minor" class="viewLogItemLabel"/>
+                  </View>
+                  <View class="viewLogItemTime">
+                    <Label id="detectTime" bindId="detectTime" class="viewLogItemLabel"/>
+                  </View>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label class="viewLogItemTitle">PROXIMITY:</Label>
+                  <Label id="proximity" bindId="proximity" class="viewLogItemLabel"/>
+                  <Label class="viewLogItemSpace"></Label>
+                  <Label class="viewLogItemTitle">POWER:</Label>
+                  <Label id="power" bindId="measuredPower" class="viewLogItemLabel"/>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label class="viewLogItemTitle">RSSI:</Label>
+                  <Label id="rssi" bindId="rssi" class="viewLogItemLabel"/>
+                  <Label class="viewLogItemSpace"></Label>
+                  <Label class="viewLogItemTitle">ACCURACY:</Label>
+                  <Label id="accuracy" bindId="accuracy" class="viewLogItemLabel"/>
+                </View>
+              </View>
+            </ItemTemplate>
+          </Templates>
+          <ListSection dataCollection="beacons">
+            <ListItem template="beaconLog" major:text="{major}" minor:text="{minor}" measuredPower:text="{measuredPower}" rssi:text="{rssi}" accuracy:text="{accuracy}" proximity:text="{proximity}" detectTime:text="{detectTime}"/>
+          </ListSection>
+        </ListView>
+      </Window>
+    </Tab>
+    <Tab id="tabEvents" title="Events">
+      <Window title="Beacon Events" platform="ios" class="container">
+        <ListView id="eventList" onItemclick="clickEventListItem">
+          <Templates>
+            <ItemTemplate name="eventLog" class="viewLogItemBase">
+              <View class="viewLogItem">
+                <View class="viewLogItemLine">
+                  <View class="viewLogItemLeft">
+                    <Label class="viewLogItemTitle">EVENT:</Label>
+                    <Label id="eventname" bindId="eventName" class="viewLogItemLabel"/>
+                  </View>
+                  <View class="viewLogItemTime">
+                    <Label id="detectTime" bindId="detectTime" class="viewLogItemLabel"/>
+                  </View>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label id="eventData" bindId="eventData" class="viewLogItemLabel"/>
+                </View>
+              </View>
+            </ItemTemplate>
+          </Templates>
+          <SearchBar hintText="Event name"></SearchBar>
+          <ListSection dataCollection="events">
+            <ListItem template="eventLog" eventName:text="{name}" detectTime:text="{time}" eventData:text="{data}" searchableText="{name}"/>
+          </ListSection>
+        </ListView>
+      </Window>
+    </Tab>
+  </TabGroup>
+  <TabGroup platform="android" onOpen="doOpen" onClose="doClose">
+    <Menu platform="android">
+      <MenuItem id="menuStart" title="Start Scan" onClick="doClickScan"/>
+      <MenuItem id="menuStop" title="Stop Scan" onClick="doClickStop"/>
+      <MenuItem id="menuClear" title="Clear" onClick="doClickClear"/>
+      <MenuItem id="menuSettings" title="Settings" onClick="doClickSettings"/>
+    </Menu>
+    <Tab id="tabBeacons" title="Beacon">
+      <Window title="TiBeaconExam" platform="android" class="container">
+        <LeftNavButton platform="ios">
+          <Button id="btnSettings" title="Settings" onClick="doClickSettings"/>
+        </LeftNavButton>
+        <RightNavButton platform="ios">
+          <Button id="btnAction" systemButton="ACTION" title="Action" onClick="doClickAction"/>
+        </RightNavButton>
+        <TitleControl platform="ios">
+          <View>
+            <Label id="titleLabel">TiBeaconExam</Label>
+            <ActivityIndicator id="indicator" message="Scanning..." style="Ti.UI.ActivityIndicatorStyle.DARK"></ActivityIndicator>
+          </View>
+        </TitleControl>
+        <ProgressIndicator id="pb" ns="Ti.UI.Android" platform="android" message="Scanning..."/>
+        <ListView id="beaconList" onItemclick="clickBeaconListItem">
+          <Templates>
+            <ItemTemplate name="beaconLog" class="viewLogItemBase">
+              <View class="viewLogItem">
+                <View class="viewLogItemLine">
+                  <View class="viewLogItemProximity">
+                    <Label class="viewLogItemTitle">MAJ:</Label>
+                    <Label id="proximity" bindId="major" class="viewLogItemLabel"/>
+                    <Label class="viewLogItemSpace"></Label>
+                    <Label class="viewLogItemTitle">MIN:</Label>
+                    <Label id="power" bindId="minor" class="viewLogItemLabel"/>
+                  </View>
+                  <View class="viewLogItemTime">
+                    <Label id="detectTime" bindId="detectTime" class="viewLogItemLabel"/>
+                  </View>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label class="viewLogItemTitle">PROXIMITY:</Label>
+                  <Label id="proximity" bindId="proximity" class="viewLogItemLabel"/>
+                  <Label class="viewLogItemSpace"></Label>
+                  <Label class="viewLogItemTitle">POWER:</Label>
+                  <Label id="power" bindId="measuredPower" class="viewLogItemLabel"/>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label class="viewLogItemTitle">RSSI:</Label>
+                  <Label id="rssi" bindId="rssi" class="viewLogItemLabel"/>
+                  <Label class="viewLogItemSpace"></Label>
+                  <Label class="viewLogItemTitle">ACCURACY:</Label>
+                  <Label id="accuracy" bindId="accuracy" class="viewLogItemLabel"/>
+                </View>
+              </View>
+            </ItemTemplate>
+          </Templates>
+          <ListSection dataCollection="beacons">
+            <ListItem template="beaconLog" major:text="{major}" minor:text="{minor}" measuredPower:text="{measuredPower}" rssi:text="{rssi}" accuracy:text="{accuracy}" proximity:text="{proximity}" detectTime:text="{detectTime}"/>
+          </ListSection>
+        </ListView>
+      </Window>
+    </Tab>
+    <Tab id="tabEvents" title="Events">
+      <Window title="Beacon Events" platform="android" class="container">
+        <ListView id="eventList" onItemclick="clickEventListItem">
+          <Templates>
+            <ItemTemplate name="eventLog" class="viewLogItemBase">
+              <View class="viewLogItem">
+                <View class="viewLogItemLine">
+                  <View class="viewLogItemLeft">
+                    <Label class="viewLogItemTitle">EVENT:</Label>
+                    <Label id="eventname" bindId="eventName" class="viewLogItemLabel"/>
+                  </View>
+                  <View class="viewLogItemTime">
+                    <Label id="detectTime" bindId="detectTime" class="viewLogItemLabel"/>
+                  </View>
+                </View>
+                <View class="viewLogItemLine">
+                  <Label id="eventData" bindId="eventData" class="viewLogItemLabel"/>
+                </View>
+              </View>
+            </ItemTemplate>
+          </Templates>
+          <SearchBar hintText="Event name"></SearchBar>
+          <ListSection dataCollection="events">
+            <ListItem template="eventLog" eventName:text="{name}" detectTime:text="{time}" eventData:text="{data}" searchableText="{name}"/>
+          </ListSection>
+        </ListView>
+      </Window>
+    </Tab>
+  </TabGroup>
+</Alloy>

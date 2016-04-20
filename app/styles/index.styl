@@ -1,0 +1,95 @@
+.container
+  backgroundColor "white"
+  layout "vertical"
+
+MenuItem[platform=android]
+  showAsAction "Ti.Android.SHOW_AS_ACTION_NEVER"
+
+#menuStart[platform=android]
+  showAsAction "Ti.Android.SHOW_AS_ACTION_IF_ROOM"
+
+#menuStop[platform=android]
+  showAsAction "Ti.Android.SHOW_AS_ACTION_IF_ROOM"
+  visible false
+
+@css {
+  #pb[platform=android] {
+    type: "Ti.UI.Android.PROGRESS_INDICATOR_INDETERMINANT";
+    location: "Ti.UI.Android.PROGRESS_INDICATOR_STATUS_BAR";
+    cancelable: true;
+  }
+}
+
+#btnSettings[platform=ios]
+  image "images/button/settings.png"
+
+#tabBeacons[platform=ios]
+  icon "images/tab/beacon.png"
+
+#tabEvents[platform=ios]
+  icon "images/tab/antenna.png"
+
+ListView[platform=ios]
+  tableSeparatorInsets left 0, right 0
+
+.viewLogItemBase
+  width "Ti.UI.FILL"
+  height "Ti.UI.SIZE"
+
+ListItem[platform=android]
+  borderWidth 1
+  borderColor "#eaeaea"
+
+.viewLogItem
+  width "Ti.UI.FILL"
+  height "Ti.UI.SIZE"
+  layout "vertical"
+
+.viewLogItem[platform=android]
+  width "96%"
+
+.viewLogItemLine
+  width "Ti.UI.FILL"
+  height "Ti.UI.SIZE"
+  layout "horizontal"
+
+.viewLogItemTitle
+  color "gray"
+  font fontSize 12
+
+.viewLogItemSpace
+  width 12
+
+.viewLogItemProximity
+  width "Ti.UI.SIZE"
+  height "Ti.UI.SIZE"
+  layout "horizontal"
+
+.viewLogItemProximity[platform=android]
+  width "48%"
+
+.viewLogItemLeft
+  width "Ti.UI.SIZE"
+  height "Ti.UI.SIZE"
+  layout "horizontal"
+
+.viewLogItemLeft[platform=android]
+  width "48%"
+
+.viewLogItemTime
+  width "Ti.UI.FILL"
+  height "Ti.UI.SIZE"
+
+.viewLogItemTime[platform=android]
+  width "48%"
+
+#detectTime
+  width "Ti.UI.FILL"
+  color "gray"
+  textAlign "Ti.UI.TEXT_ALIGNMENT_RIGHT"
+
+#detectTime[platform=ios]
+  font fontSize 14
+
+#detectTime[platform=android]
+  font fontSize 12

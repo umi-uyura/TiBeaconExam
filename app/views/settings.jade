@@ -1,0 +1,15 @@
+mixin beaconInfoWindow(platform)
+  Window.container(title="Settings", platform=platform, onOpen="doOpen", onClose="doClose", onAndroidback="doClickClose")
+    LeftNavButton(platform="ios")
+      Button#btnClose(title="Close", onClick="doClickClose")/
+    View.base
+      Require#settingBeaconIdentifier(src="settingitem", subject="Identifier", text="hogehoge")
+      Require#settingBeaconUUID(src="settingitem", subject="UUID", text="fugafuga")
+      Require#settingBeaconMajor(src="settingitem", subject="Major")
+      Require#settingBeaconMinor(src="settingitem", subject="Minor")
+
+Alloy
+  Model(src="setting")/
+  NavigationWindow(platform="ios")
+    +beaconInfoWindow("ios")
+  +beaconInfoWindow("android")

@@ -1,0 +1,117 @@
+"use strict";
+
+task("pre:compile", function(event, logger) {
+  var wrench = require("wrench"),
+      fs = require("fs"),
+      path = require("path"),
+      jade = require("jade"),
+      styl = require("stylus"),
+      view_root = event.dir.views,
+      style_root = event.dir.styles;
+
+  // jade //////////////////////////////////////////////////
+  event.alloyConfig.xml = [];
+  wrench.readdirSyncRecursive(view_root).forEach(function(view) {
+    if (view.match(/\.jade$/)) {
+      event.alloyConfig.xml.push(view.replace(/\.jade$/, ".xml"));
+      var jadeOption = {
+        filename: path.join(view_root, view),
+        pretty: (event.alloyConfig.deploytype === "development"),
+        compileDebug: (event.alloyConfig.deploytype !== "production")
+      };
+      fs.writeFileSync(
+        path.join(view_root, view.replace(/\.jade$/, ".xml")),
+        jade.compile(fs.readFileSync(path.join(view_root, view)).toString(), jadeOption)(event));
+    }
+  });
+
+  // Files that start with '_' ,
+  // because is to use in `include` of Jade, it should be deleted here
+  event.alloyConfig.xml.forEach(function(view) {
+    if (view.match(/^_\S*.xml$/g)) {
+      fs.unlinkSync(path.join(view_root, view));
+    }
+  });
+  // ~jade /////////////////////////////////////////////////
+
+  // stylus ////////////////////////////////////////////////
+  event.alloyConfig.stylus = [];
+  var compileTSS = function(root, target) {
+    var data = fs.readFileSync(path.join(root, target), "utf8"),
+        tss;
+
+    styl.render(data, function(err, css) {
+      css = css.replace(/;/gi, ",");
+      css = css.replace(/\}/gi, "},");
+      css = css.replace(/(.+?).?\{/gi, "\"$1\": {");
+      css = css.replace(/,\n\},/gi, "\n\}");
+      css = css.replace(/\}\n\"/gi, "\},\n\"");
+      css = css.replace(/['"]expr(.+?)['"]/gi, "expr$1");
+      css = css.replace(/['"]Ti(.+?)['"]/gi, "Ti$1");
+      css = css.replace(/['"]Titanium(.+?)['"]/gi, "Titanium$1");
+      css = css.replace(/['"]Alloy(.+?)['"]/gi, "Alloy$1");
+      tss = css;
+    });
+
+    var tss2 = [];
+    tss.split("\n").forEach(function(line) {
+      var match = line.match(/font:|anchorPoint:|center:|separatorInsets:|tableSeparatorInsets:|listSeparatorInsets:|properties:/);
+      if (match) {
+        var fontObj = RegExp.rightContext.replace(/(^\s+)|(\s+$)/g, "");
+        var closeBrace = "  }";
+        if (fontObj.match(/,$/)) {
+          closeBrace = closeBrace + ",";
+          fontObj = fontObj.replace(/,$/, "");
+        }
+
+        tss2.push("  " + match + " {");
+        var fontObjArray = fontObj.split(",");
+        for (var i = 0; i < fontObjArray.length; i++) {
+          var f = fontObjArray[i].replace(/(^\s+)|(\s+$)/g, "").replace(/ /, ":");
+          if (1 < fontObjArray.length && i < (fontObjArray.length - 1)) {
+            f = f + ",";
+          }
+          tss2.push("    " + f);
+        }
+
+        tss2.push(closeBrace);
+      } else {
+        tss2.push(line);
+      }
+    });
+
+    return tss2.join("\n");
+  };
+
+  wrench.readdirSyncRecursive(style_root).forEach(function(view) {
+    if (view.match("styl$")) {
+      var tss = compileTSS(style_root, view);
+      event.alloyConfig.stylus.push(view.replace(/\.styl$/, ".tss"));
+      fs.writeFileSync(path.join(style_root, view.replace("styl", "tss")), tss);
+    }
+  });
+  // ~stylus ///////////////////////////////////////////////
+});
+
+task("post:compile", function(event, logger) {
+  var fs = require("fs"),
+      path = require("path"),
+      view_root = event.dir.views,
+      style_root = event.dir.styles;
+
+  if (event.alloyConfig.deploytype !== "development") {
+    // jade
+    event.alloyConfig.xml.forEach(function(view) {
+      if (!view.match(/index.xml/g)) {
+        fs.unlinkSync(path.join(view_root, view));
+      }
+    });
+    // ~jade
+
+    // stylus
+    event.alloyConfig.stylus.forEach(function(target) {
+      fs.unlinkSync(style_root + "/" + target);
+    });
+    // ~stylus
+  }
+});

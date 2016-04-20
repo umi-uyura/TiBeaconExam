@@ -1,0 +1,7 @@
+
+<Alloy>
+  <View class="base">
+    <Label id="subject" class="label"></Label>
+    <TextField id="text" class="textfield"></TextField>
+  </View>
+</Alloy>

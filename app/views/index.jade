@@ -1,0 +1,69 @@
+mixin mainWindow(platform)
+  TabGroup(platform=platform, onOpen="doOpen", onClose="doClose")
+    Menu(platform="android")
+      MenuItem#menuStart(title="Start Scan", onClick="doClickScan")/
+      MenuItem#menuStop(title="Stop Scan", onClick="doClickStop")/
+      MenuItem#menuClear(title="Clear", onClick="doClickClear")/
+      MenuItem#menuSettings(title="Settings", onClick="doClickSettings")/
+    Tab#tabBeacons(title="Beacon")
+      Window.container(title="TiBeaconExam", platform=platform)
+        LeftNavButton(platform="ios")
+          Button#btnSettings(title="Settings", onClick="doClickSettings")/
+        RightNavButton(platform="ios")
+          Button#btnAction(systemButton="ACTION", title="Action", onClick="doClickAction")/
+        TitleControl(platform="ios")
+          View
+            Label#titleLabel TiBeaconExam
+            ActivityIndicator#indicator(message="Scanning...", style="Ti.UI.ActivityIndicatorStyle.DARK")
+        ProgressIndicator#pb(ns="Ti.UI.Android" platform="android" message="Scanning...")/
+        ListView#beaconList(onItemclick="clickBeaconListItem")
+          Templates
+            ItemTemplate.viewLogItemBase(name="beaconLog")
+              View.viewLogItem
+                View.viewLogItemLine
+                  View.viewLogItemProximity
+                    Label.viewLogItemTitle MAJ:
+                    Label#proximity.viewLogItemLabel(bindId="major")/
+                    Label.viewLogItemSpace
+                    Label.viewLogItemTitle MIN:
+                    Label#power.viewLogItemLabel(bindId="minor")/
+                  View.viewLogItemTime
+                    Label#detectTime.viewLogItemLabel(bindId="detectTime")/
+                View.viewLogItemLine
+                  Label.viewLogItemTitle PROXIMITY:
+                  Label#proximity.viewLogItemLabel(bindId="proximity")/
+                  Label.viewLogItemSpace
+                  Label.viewLogItemTitle POWER:
+                  Label#power.viewLogItemLabel(bindId="measuredPower")/
+                View.viewLogItemLine
+                  Label.viewLogItemTitle RSSI:
+                  Label#rssi.viewLogItemLabel(bindId="rssi")/
+                  Label.viewLogItemSpace
+                  Label.viewLogItemTitle ACCURACY:
+                  Label#accuracy.viewLogItemLabel(bindId="accuracy")/
+          ListSection(dataCollection="beacons")
+            ListItem(template="beaconLog", major:text="{major}" minor:text="{minor}" measuredPower:text="{measuredPower}", rssi:text="{rssi}", accuracy:text="{accuracy}", proximity:text="{proximity}", detectTime:text="{detectTime}")/
+    Tab#tabEvents(title="Events")
+      Window.container(title="Beacon Events",  platform=platform)
+        ListView#eventList(onItemclick="clickEventListItem")
+          Templates
+            ItemTemplate.viewLogItemBase(name="eventLog")
+              View.viewLogItem
+                View.viewLogItemLine
+                  View.viewLogItemLeft
+                    Label.viewLogItemTitle EVENT:
+                    Label#eventname.viewLogItemLabel(bindId="eventName")/
+                  View.viewLogItemTime
+                    Label#detectTime.viewLogItemLabel(bindId="detectTime")/
+                View.viewLogItemLine
+                  Label#eventData.viewLogItemLabel(bindId="eventData")/
+          SearchBar(hintText="Event name")
+          ListSection(dataCollection="events")
+            ListItem(template="eventLog", eventName:text="{name}", detectTime:text="{time}", eventData:text="{data}", searchableText="{name}")/
+
+Alloy
+  Model(src="setting")/
+  Collection(src="beacons")/
+  Collection(src="events")/
+  +mainWindow("ios")
+  +mainWindow("android")
