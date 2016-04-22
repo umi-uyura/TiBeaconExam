@@ -9,3 +9,8 @@
 // object. For example:
 //
 // Alloy.Globals.someGlobalFunction = function(){};
+
+Alloy.Globals.notifier = Alloy.createWidget('com.caffeinalab.titanium.notifications', {
+  duration: 2000,
+  icon: '/appicon.png'
+});

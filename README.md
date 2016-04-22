@@ -31,6 +31,10 @@ The above packages are using in alloy.jmk. Therefore, it is necessary to be inst
 
 For module installation methods, refer to [the Appcelerator Document](https://docs.appcelerator.com/platform/latest/#!/guide/Using_a_Module) .
 
+### Widgets
+
+* [caffeinalab/ti.notifications](https://github.com/caffeinalab/ti.notifications)
+
 
 Credit
 ------

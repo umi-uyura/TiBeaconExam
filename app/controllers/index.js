@@ -16,6 +16,75 @@ var progressTimer = null;
 //
 //
 
+function setBeaconInfo(uuid, identifier, major, minor) {
+  var beacon = {
+    uuid: uuid,
+    identifier: identifier
+  };
+
+  if (!_.isUndefined(major) && '' !== major) {
+    beacon.major = parseInt(major);
+  }
+
+  if (!_.isUndefined(minor) && '' !== minor) {
+    beacon.minor = parseInt(minor);
+  }
+
+  return beacon;
+}
+
+function notifyRegionEvent(e) {
+  Ti.API.debug('index.js - notifyRegionEvent() = ' + JSON.stringify(e));
+
+  var message = '';
+  switch (e.type) {
+  case 'enteredRegion':
+    message = 'Entered Region';
+    break;
+  case 'exitedRegion':
+    message = 'Exited Region';
+    break;
+  case 'determinedRegionState':
+    if (e.regionState === 'inside') {
+      message = 'Inside Region';
+    }
+    break;
+  default:
+    break;
+  }
+
+  if (message === '') {
+    return;
+  }
+
+  Ti.API.debug('index.js - notifyRegionEvent() message = ' + message);
+
+  if (OS_IOS) {
+    Ti.App.Properties.setString('message', message);
+    if(Ti.App.Properties.hasProperty('message')){
+      Ti.App.iOS.cancelAllLocalNotifications();
+
+      var msg = Ti.App.Properties.getString('message');
+      var occurDate = new Date() /*new Date(new Date().getTime() + 5000)*/;
+
+      var notifications = [];
+      var notification_params = {
+        alertBody: msg,
+        userInfo: {
+          alertMessage: msg,
+          occurDate: occurDate
+        },
+        date: occurDate
+      };
+      notifications.push(Ti.App.iOS.scheduleLocalNotification(notification_params));
+      Ti.App.Properties.removeProperty('message');
+    }
+
+  } else if (OS_ANDROID) {
+    // TODO: implementation
+  }
+}
+
 function recordEvents(eventname, e) {
   var event = Alloy.createModel('events', {
     time: moment().format('YYYY/MM/DD HH:mm:ss'),
@@ -30,16 +99,28 @@ function recordEvents(eventname, e) {
 function handlerEnteredRegion(e) {
   Ti.API.debug('[enteredRegion] = ' + JSON.stringify(e));
   recordEvents('enteredRegion', e);
+  notifyRegionEvent(e);
 }
 
 function handlerExitedRegion(e) {
   Ti.API.debug('[exitedRegion] = ' + JSON.stringify(e));
   recordEvents('exitedRegion', e);
+  notifyRegionEvent(e);
 }
 
 function handlerDeterminedRegionState(e) {
   Ti.API.debug('[determinedRegionState] = ' + JSON.stringify(e));
   recordEvents('determinedRegionState', e);
+  notifyRegionEvent(e);
+
+  if (OS_ANDROID && _.isUndefined(e.uuid)) {
+    e.uuid = setting.get('beaconUUID');
+  }
+
+  if (e.regionState === 'inside') {
+    var beacon = setBeaconInfo(e.uuid, e.identifier, e.major, e.minor);
+    TiBeacon.startRangingForBeacons(beacon);
+  }
 }
 
 function handlerBeaconRanges(e) {
@@ -100,10 +181,16 @@ function doOpen() {
 }
 
 function doClose() {
-  removeBeaconEventListener();
+  Ti.API.debug('index.js - doClose()');
 
-  TiBeacon.stopRangingForAllBeacons();
-  TiBeacon.stopMonitoringAllRegions();
+  exitApp();
+}
+
+function exitApp() {
+  Ti.API.debug('index.js - exitApp()');
+
+  stopScan();
+  removeBeaconEventListener();
 
   if (OS_ANDROID) {
     if (TiBeacon.beaconServiceIsBound()) {
@@ -210,21 +297,8 @@ function startScan() {
   var major = setting.get('beaconMajor');
   var minor = setting.get('beaconMinor');
 
-  var beacon = {
-    uuid: uuid,
-    identifier: identifier
-  };
-
-  if ('' !== major) {
-    beacon.major = parseInt(major);
-  }
-
-  if ('' !== minor) {
-    beacon.minor = parseInt(minor);
-  }
-
+  var beacon = setBeaconInfo(uuid, identifier, major, minor);
   TiBeacon.startMonitoringForRegion(beacon);
-  TiBeacon.startRangingForBeacons(beacon);
 }
 
 function stopScan() {
@@ -371,6 +445,19 @@ function activateBeacon() {
 // main
 //
 //
+
+if (OS_IOS) {
+  Ti.App.iOS.addEventListener('notification', function(e) {
+    Alloy.Globals.notifier.show(e.userInfo.alertMessage);
+  });
+
+  // Check if the device is running iOS 8 or later, before registering for local notifications
+  if (Ti.Platform.name === 'iPhone OS' && parseInt(Ti.Platform.version.split('.')[0]) >= 8) {
+    Ti.App.iOS.registerUserNotificationSettings({
+      types: [Ti.App.iOS.USER_NOTIFICATION_TYPE_ALERT]
+    });
+  }
+}
 
 addBeaconEventListener();
 $.index.open();
