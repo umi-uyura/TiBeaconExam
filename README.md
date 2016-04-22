@@ -39,7 +39,4 @@ For module installation methods, refer to [the Appcelerator Document](https://do
 Credit
 ------
 
-* iBeacon module
-    * iOS - [Sensimity/TiBeacons](https://github.com/Sensimity/TiBeacons)
-    * Android - [android-altbeacon-module](https://github.com/Sensimity/android-altbeacon-module)
 * iOS NavBar/Tab Icons - [icooon-mono](http://icooon-mono.com/)
