@@ -81,7 +81,34 @@ function notifyRegionEvent(e) {
     }
 
   } else if (OS_ANDROID) {
-    // TODO: implementation
+    // Intent object to launch the application
+    var intent = Ti.Android.createIntent({
+      action: Ti.Android.ACTION_MAIN,
+      className: 'com.example.tibeaconexam.TibeaconexamActivity',
+      packageName: 'com.example.tibeaconexam'
+    });
+    intent.flags |= Ti.Android.FLAG_ACTIVITY_CLEAR_TOP | Ti.Android.FLAG_ACTIVITY_NEW_TASK;
+    intent.addCategory(Ti.Android.CATEGORY_LAUNCHER);
+
+    // Create a PendingIntent to tie together the Activity and Intent
+    var pending = Titanium.Android.createPendingIntent({
+      intent: intent,
+      flags: Titanium.Android.FLAG_UPDATE_CURRENT
+    });
+
+    // Create the notification
+    var notification = Titanium.Android.createNotification({
+      // icon is passed as an Android resource ID -- see Ti.App.Android.R.
+      icon: Ti.App.Android.R.drawable.appicon,
+      contentTitle: 'TiBeaconExam',
+      contentText : message,
+      contentIntent: pending,
+      defaults: Titanium.Android.DEFAULT_ALL,
+      flags: Ti.Android.FLAG_AUTO_CANCEL | Ti.Android.FLAG_SHOW_LIGHTS
+    });
+
+    // Send the notification.
+    Titanium.Android.NotificationManager.notify(1, notification);
   }
 }
 
