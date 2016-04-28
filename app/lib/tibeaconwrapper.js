@@ -41,6 +41,11 @@ exports.startMonitoringForRegion = function(region) {
   tibeacon.startMonitoringForRegion(region);
 };
 
+exports.stopMonitoringRegion = function(region) {
+  Ti.API.debug('TiBeaconWrapper.stopMonitoringRegion() - ' + JSON.stringify(region));
+  tibeacon.stopMonitoringRegion(region);
+};
+
 exports.stopMonitoringAllRegions = function() {
   Ti.API.debug('TiBeaconWrapper.stopMonitoringAllRegions()');
   tibeacon.stopMonitoringAllRegions();
@@ -49,6 +54,11 @@ exports.stopMonitoringAllRegions = function() {
 exports.startRangingForBeacons = function(region) {
   Ti.API.debug('TiBeaconWrapper.startRangingForBeacons() - ' + JSON.stringify(region));
   tibeacon.startRangingForBeacons(region);
+};
+
+exports.stopRangingForBeacons = function(region) {
+  Ti.API.debug('TiBeaconWrapper.stopRangingForBeacons() - ' + JSON.stringify(region));
+  tibeacon.stopRangingForBeacons(region);
 };
 
 exports.stopRangingForAllBeacons = function() {
