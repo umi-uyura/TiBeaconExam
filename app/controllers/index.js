@@ -160,16 +160,16 @@ function addBeaconEventListener() {
   TiBeacon.addEventListener('enteredRegion', handlerEnteredRegion);
   TiBeacon.addEventListener('exitedRegion', handlerExitedRegion);
   TiBeacon.addEventListener('determinedRegionState', handlerDeterminedRegionState);
-  TiBeacon.addEventListener('beaconRanges', handlerBeaconRanges);
-  TiBeacon.addEventListener('beaconProximity', handlerBeaconProximity);
+  TiBeacon.addEventListener('beaconRanges', OS_IOS ? _.debounce(handlerBeaconRanges, 3000) : handlerBeaconRanges);
+  TiBeacon.addEventListener('beaconProximity', OS_ANDROID ? _.debounce(handlerBeaconProximity, 5000) : handlerBeaconProximity);
 }
 
 function removeBeaconEventListener() {
   TiBeacon.removeEventListener('enteredRegion', handlerEnteredRegion);
   TiBeacon.removeEventListener('exitedRegion', handlerExitedRegion);
   TiBeacon.removeEventListener('determinedRegionState', handlerDeterminedRegionState);
-  TiBeacon.removeEventListener('beaconRanges', OS_IOS ? _.debounce(handlerBeaconRanges, 5000) : handlerBeaconRanges);
-  TiBeacon.removeEventListener('beaconProximity', OS_ANDROID ? _.debounce(handlerBeaconProximity, 5000) : handlerBeaconProximity);
+  TiBeacon.removeEventListener('beaconRanges', handlerBeaconRanges);
+  TiBeacon.removeEventListener('beaconProximity', handlerBeaconProximity);
 }
 
 function doOpen() {
