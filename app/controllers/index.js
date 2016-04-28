@@ -188,7 +188,7 @@ function addBeaconEventListener() {
   TiBeacon.addEventListener('exitedRegion', handlerExitedRegion);
   TiBeacon.addEventListener('determinedRegionState', handlerDeterminedRegionState);
   TiBeacon.addEventListener('beaconRanges', OS_IOS ? _.debounce(handlerBeaconRanges, 3000) : handlerBeaconRanges);
-  TiBeacon.addEventListener('beaconProximity', OS_ANDROID ? _.debounce(handlerBeaconProximity, 5000) : handlerBeaconProximity);
+  TiBeacon.addEventListener('beaconProximity', OS_ANDROID ? _.debounce(handlerBeaconProximity, 5000, true) : handlerBeaconProximity);
 }
 
 function removeBeaconEventListener() {
