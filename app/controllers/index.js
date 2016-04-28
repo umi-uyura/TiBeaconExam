@@ -106,6 +106,9 @@ function handlerExitedRegion(e) {
   Ti.API.debug('[exitedRegion] = ' + JSON.stringify(e));
   recordEvents('exitedRegion', e);
   notifyRegionEvent(e);
+
+  var beacon = setBeaconInfo(e.uuid, e.identifier, e.major, e.minor);
+  TiBeacon.stopRangingForBeacons(beacon);
 }
 
 function handlerDeterminedRegionState(e) {
