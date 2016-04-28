@@ -107,8 +107,12 @@ function handlerExitedRegion(e) {
   recordEvents('exitedRegion', e);
   notifyRegionEvent(e);
 
-  var beacon = setBeaconInfo(e.uuid, e.identifier, e.major, e.minor);
-  TiBeacon.stopRangingForBeacons(beacon);
+  if (OS_IOS) {
+    var beacon = setBeaconInfo(e.uuid, e.identifier, e.major, e.minor);
+    TiBeacon.stopRangingForBeacons(beacon);
+  } else if (OS_ANDROID) {
+    TiBeacon.stopRangingForAllBeacons();
+  }
 }
 
 function handlerDeterminedRegionState(e) {
