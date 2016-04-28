@@ -12,5 +12,5 @@
 
 Alloy.Globals.notifier = Alloy.createWidget('com.caffeinalab.titanium.notifications', {
   duration: 2000,
-  icon: '/appicon.png'
+  icon: '/notifyicon.png'
 });
