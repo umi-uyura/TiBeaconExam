@@ -169,7 +169,7 @@ function removeBeaconEventListener() {
   TiBeacon.removeEventListener('exitedRegion', handlerExitedRegion);
   TiBeacon.removeEventListener('determinedRegionState', handlerDeterminedRegionState);
   TiBeacon.removeEventListener('beaconRanges', OS_IOS ? _.debounce(handlerBeaconRanges, 5000) : handlerBeaconRanges);
-  TiBeacon.removeEventListener('beaconProximity', handlerBeaconProximity);
+  TiBeacon.removeEventListener('beaconProximity', OS_ANDROID ? _.debounce(handlerBeaconProximity, 5000) : handlerBeaconProximity);
 }
 
 function doOpen() {
